@@ -1,0 +1,22 @@
+<resources>
+	<string name="app_name">Asquire Filip 0x08</string>
+	<string name="logo">asquire logo</string>
+	<string name="allowed_name_chars2">abcdefghijklmnopqrstuvwxyz</string>
+	<string name="allowed_name_chars">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz</string>
+	<string name="category_overview">Overview</string>
+	<string name="hint_profile_name">Name</string>
+	<string name="hint_profile_age">Age</string>
+	<string name="unit_profile_age">years</string>
+	<string name="category_gender">Gender</string>
+	<string name="category_measurement">Measurements</string>
+	<string name="hint_profile_height">Height</string>
+	<string name="unit_profile_height">cm</string>
+	<string name="hint_profile_weight">Weight</string>
+	<string name="unit_profile_weight">kg</string>
+	<string name="next">Next</string>
+	<string name="info">Info</string>
+	<string name="record">Record</string>
+	<string name="options">Reset</string>
+	<string name="need_record_audio_permission">Gibb permission plss</string>
+	<string name="stop">Stop</string>
+</resources>

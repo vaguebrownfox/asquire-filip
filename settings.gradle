@@ -1,0 +1,2 @@
+include ':asquire'
+rootProject.name = "Asquire Filip 0x08"

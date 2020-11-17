@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "405641019536",
+    "firebase_url": "https://asquire-filip.firebaseio.com",
+    "project_id": "asquire-filip",
+    "storage_bucket": "asquire-filip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405641019536:android:915ae89ebf95c06e679815",
+        "android_client_info": {
+          "package_name": "aashi.fiaxco.asquirefilip0x08"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405641019536-2sjlfnp56gji2ng6eras8t63m65poqmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWDXvbfme4RCFVZkJO6qC8hwV08_s-Bbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405641019536-2sjlfnp56gji2ng6eras8t63m65poqmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

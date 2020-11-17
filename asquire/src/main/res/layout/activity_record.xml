@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".RecordActivity">
+
+	<TextView
+		android:id="@+id/task_frag_description_tv"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:alpha="1"
+		android:fontFamily="sans-serif"
+		android:padding="16dp"
+		android:text="Take a deep breath in and say 'Eee' as in 'peace'  while breathing out"
+		android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+		android:textSize="48sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:id="@+id/button_info"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:backgroundTint="@android:color/white"
+		android:contentDescription="@string/info"
+		android:src="@android:drawable/ic_dialog_info"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/task_frag_description_tv" />
+
+	<Button
+		android:id="@+id/control_button_record"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="32dp"
+		android:text="@string/record"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<Button
+		android:id="@+id/control_button_next"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/next"
+		app:layout_constraintBaseline_toBaselineOf="@+id/control_button_record"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/control_button_record" />
+
+	<Button
+		android:id="@+id/control_button_options"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/options"
+		app:layout_constraintBaseline_toBaselineOf="@+id/control_button_record"
+		app:layout_constraintEnd_toStartOf="@+id/control_button_record"
+		app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
