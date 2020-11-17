@@ -49,21 +49,16 @@ public:
 	AsqRecEngine();
 	~AsqRecEngine();
 
-	oboe::AudioStreamBuilder *setupRecordStreamParameters(oboe::AudioStreamBuilder *builder);
-
-	oboe::Result openRecStream();
-	void closeRecStream();
-
-	oboe::Result start();
-	oboe::Result stop();
-
 	bool setRecOn(bool isOn);
 
+private:
+	oboe::AudioStreamBuilder *setupRecordStreamParameters(oboe::AudioStreamBuilder *builder);
+	oboe::Result openRecStream();
+	void closeRecStream();
+	oboe::Result start();
+	oboe::Result stop();
 	void wavFileWriter();
 	void wavFileFinish();
-
-
-private:
 	void recordStream();
 
 
@@ -77,6 +72,9 @@ public: // is, set, get
 		mRecFilePath = recFilePath;
 	}
 
+	const char* getWavFilePath() {
+		return mRecFilePath;
+	}
 };
 
 

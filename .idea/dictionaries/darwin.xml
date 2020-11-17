@@ -1,7 +1,11 @@
 <component name="ProjectDictionaryState">
   <dictionary name="darwin">
     <words>
+      <w>coeffs</w>
+      <w>mfcc</w>
+      <w>pstop</w>
       <w>rengine</w>
+      <w>rstop</w>
     </words>
   </dictionary>
 </component>

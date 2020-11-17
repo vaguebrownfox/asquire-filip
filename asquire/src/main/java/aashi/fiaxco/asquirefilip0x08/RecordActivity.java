@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqEngine;
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqViewModel;
@@ -80,6 +84,29 @@ public class RecordActivity extends AppCompatActivity {
 		optionButton.setOnClickListener(view -> {
 			Log.d(TAG, "onClick: TODO options");
 			makeToast("Reset: record again");
+
+			String modelFileName = "model.txt";
+			AssetManager asqAssets = getAssets();
+			File modelFile = new File(getCacheDir(), modelFileName);
+
+			try {
+				InputStream inputStream = asqAssets.open(modelFileName);
+				int size = inputStream.available();
+				byte[] buffer = new byte[size];
+				int n = inputStream.read(buffer);
+				inputStream.close();
+				Log.d(TAG, "onCreate: asset ip stream - " + n);
+
+				FileOutputStream fos = new FileOutputStream(modelFile);
+				fos.write(buffer);
+				fos.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			AsqEngine.asqPredict(modelFile.getAbsolutePath());
+			Log.d(TAG, "onCreate: prediction done?");
 		});
 
 	}
@@ -160,7 +187,6 @@ public class RecordActivity extends AppCompatActivity {
 
 		Intent upServiceIntent = new Intent(this, UploadService.class);
 		startService(upServiceIntent);
-
 		bindService(upServiceIntent, mAsqViewModel.getUploadServiceConnection(), Context.BIND_AUTO_CREATE);
 	}
 

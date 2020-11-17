@@ -2,6 +2,7 @@
 #include <string>
 #include <logging_macros.h>
 #include "asqengine/AsqRecEngine.h"
+#include "prediction/Prediction.h"
 
 AsqRecEngine *rengine = nullptr;
 
@@ -98,4 +99,18 @@ Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_native_1setDefaultStrea
                                                                                         jint default_frames_per_burst) {
     oboe::DefaultStreamValues::SampleRate = (int32_t) default_sample_rate;
     oboe::DefaultStreamValues::FramesPerBurst = (int32_t) default_frames_per_burst;
+}
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_asqPredict(JNIEnv *env, jclass clazz,
+                                                                    jstring model_file_path) {
+
+    const char *modelFilePath = env->GetStringUTFChars(model_file_path, nullptr);
+    const char *wavFilePath = rengine->getWavFilePath();
+
+    Prediction asqPrediction(wavFilePath, modelFilePath);
+
+    asqPrediction.asqPredict();
 }

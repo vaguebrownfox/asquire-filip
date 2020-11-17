@@ -86,14 +86,17 @@ public class AudioService extends Service {
 
 		Random rand = new Random();
 		int id = rand.nextInt(2000);
-		RecFilename = "myWavFile_" + Build.DEVICE  + "_" + id + ".wav";
+		RecFilename = "myWavFile_" + Build.DEVICE + "_"
+								   + Build.PRODUCT + "_"
+								   + Build.HARDWARE + "_"
+								   + Build.MANUFACTURER+ "_"
+								   + Build.BRAND + "_" + id + ".wav";
+
 		File recFile = new File(getCacheDir(), RecFilename);
 		RecFilePath = recFile.getAbsolutePath();
 		AsqEngine.setRecFilePath(recFile.getAbsolutePath());
 
-		Thread thread = new Thread(() -> {
-			AsqEngine.setRecOn(true);
-		});
+		Thread thread = new Thread(() -> AsqEngine.setRecOn(true));
 
 		thread.start();
 		mState = STATE.RSTOP;

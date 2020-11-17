@@ -36,4 +36,5 @@ public enum AsqEngine {
 		native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst);
 	}
 
+	public static native void asqPredict(String modelFilePath);
 }
