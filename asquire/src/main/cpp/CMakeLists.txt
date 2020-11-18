@@ -16,14 +16,14 @@ project("asquirefilip0x08")
 
 
 # kaldi-lite source
-#set(KALDI_DIR /home/darwin/Libs/kaldi_lite)
-#add_subdirectory(${KALDI_DIR} ./kaldi-bin)
-#include_directories(
-#        ${KALDI_DIR}/include
-#        ${KALDI_DIR}/include/kaldi
-#        ${KALDI_DIR}/include/libsvm
-#        ${KALDI_DIR}/include/openfst
-#)
+set(KALDI_DIR /home/darwin/Libs/kaldi_lite)
+add_subdirectory(${KALDI_DIR} ./kaldi-bin)
+include_directories(
+        ${KALDI_DIR}/include
+        ${KALDI_DIR}/include/kaldi
+        ${KALDI_DIR}/include/libsvm
+        ${KALDI_DIR}/include/openfst
+)
 
 # Oboe source - download from github: gooogle/oboe
 set(OBOE_DIR /home/darwin/Libs/oboe)
@@ -43,45 +43,10 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        support/kaldi/base/io-funcs.cc
-        support/kaldi/base/kaldi-error.cc
-        support/kaldi/base/kaldi-math.cc
-        support/kaldi/base/kaldi-utils.cc
-        support/kaldi/base/timer.cc
-        support/kaldi/feat/feature-functions.cc
-        support/kaldi/feat/feature-mfcc.cc
-        support/kaldi/feat/feature-window.cc
-        support/kaldi/feat/mel-computations.cc
-        support/kaldi/feat/resample.cc
-        support/kaldi/feat/wave-reader.cc
-        support/kaldi/matrix/compressed-matrix.cc
-        support/kaldi/matrix/kaldi-matrix.cc
-        support/kaldi/matrix/kaldi-vector.cc
-        support/kaldi/matrix/matrix-functions.cc
-        support/kaldi/matrix/optimization.cc
-        support/kaldi/matrix/packed-matrix.cc
-        support/kaldi/matrix/qr.cc
-        support/kaldi/matrix/sp-matrix.cc
-        support/kaldi/matrix/sparse-matrix.cc
-        support/kaldi/matrix/srfft.cc
-        support/kaldi/matrix/tp-matrix.cc
-        support/kaldi/transform/cmvn.cc
-        support/kaldi/util/kaldi-holder.cc
-        support/kaldi/util/kaldi-io.cc
-        support/kaldi/util/kaldi-semaphore.cc
-        support/kaldi/util/kaldi-table.cc
-        support/kaldi/util/parse-options.cc
-        support/kaldi/util/simple-io-funcs.cc
-        support/kaldi/util/text-utils.cc
-        support/kaldi/ivector/voice-activity-detection.cc
-        support/kaldi/ivectorbin/compute-vad.cc
-        support/libsvm/svm-predict.c
-        support/libsvm/svm.cpp
-
-
         asqengine/AsqRecEngine.cpp
         asqengine/AsqPlyEngine.cpp
         prediction/Prediction.cpp
+        prediction/svm-predict.cpp
         jni-bridge.cpp)
 
 target_include_directories(
@@ -90,10 +55,10 @@ target_include_directories(
         ${OBOE_DIR}/samples/debug-utils
         ${OBOE_DIR}/include
 
-        support/include
-        support/include/kaldi
-        support/include/libsvm
-        support/include/openfst
+        ${KALDI_DIR}/include
+        ${KALDI_DIR}/include/kaldi
+        ${KALDI_DIR}/include/libsvm
+        ${KALDI_DIR}/include/openfst
 )
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -157,6 +122,7 @@ set_target_properties(openblas
 target_link_libraries( # Specifies the target library.
         asq-lib
         oboe
+        kaldlite
         android
         atomic
         clapack

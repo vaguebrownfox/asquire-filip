@@ -19,7 +19,7 @@ AsqRecEngine::AsqRecEngine() {
 	mDirection = oboe::Direction::Input;
 	mChannelCount = oboe::ChannelCount::Mono;
 	mFormat = oboe::AudioFormat::I16;
-	mSampleRate = oboe::kUnspecified;
+	mSampleRate = 16000;
 }
 
 AsqRecEngine::~AsqRecEngine() {
@@ -35,6 +35,7 @@ AsqRecEngine::setupRecordStreamParameters(oboe::AudioStreamBuilder *builder) {
 			->setPerformanceMode(oboe::PerformanceMode::LowLatency)
 			->setFormat(mFormat)
 			->setChannelCount(mChannelCount)
+			->setSampleRate(mSampleRate)
 			->setUsage(oboe::Usage::Media)
 			->setContentType(oboe::ContentType::Speech)
 			->setInputPreset(oboe::InputPreset::VoicePerformance);
@@ -232,8 +233,8 @@ void AsqRecEngine::wavFileWriter() {
 	writeWord(mRecFile, nCh, 2);  // one channel (mono) or two channels (stereo file)
 	writeWord(mRecFile, Fs, 4);  // samples per second (Hz)
 	//writeWord( f, 176400, 4 );  // (Sample Rate * BitsPerSample * Channels) / 8
-	writeWord(mRecFile, (Fs * bPS * nCh) / 8, 4);  // (Sample Rate * BitsPerSample * Channels) / 8
-	writeWord(mRecFile, 4, 2);  // data block size (size of two integer samples, one for each channel, in bytes)
+	writeWord(mRecFile, (Fs * bPS * nCh)/8, 4);  // (Sample Rate * BitsPerSample * Channels) / 8
+	writeWord(mRecFile, nCh * bPS/8, 2);  // data block size (size of two integer samples, one for each channel, in bytes)
 	writeWord(mRecFile, bPS, 2);  // number of bits per sample (use a multiple of 8)
 
 	// Write the data chunk header
@@ -250,7 +251,7 @@ void AsqRecEngine::wavFileFinish() {
 	// Fix the data chunk header to contain the data size
 	g_total_data_size = file_length - mDataChunkPos + 8;
 	mRecFile.seekp(mDataChunkPos + 4);
-	little_endian_io::writeWord(mRecFile, static_cast<int16_t>(g_total_data_size));
+	little_endian_io::writeWord(mRecFile, static_cast<int32_t>(g_total_data_size), 4);
 
 	// Fix the file header to contain the proper RIFF chunk size, which is (file size - 8) bytes
 	mRecFile.seekp(0 + 4);

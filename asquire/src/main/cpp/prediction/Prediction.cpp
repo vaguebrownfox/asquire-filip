@@ -7,16 +7,7 @@
 
 Prediction::Prediction(const char* wavFilepath, const char* modelFilePath) {
 
-	char featFilepath[200];
-	char outFilepath[200];
-	strcpy(featFilepath, wavFilepath);
-	strcat(featFilepath, ".feat.txt");
-	strcpy(outFilepath, wavFilepath);
-	strcat(outFilepath, ".out.txt");
-
 	mWavFilePath = wavFilepath;
-	mFeatsFilePath = featFilepath;
-	mOutFilePath = outFilepath;
 	mModelFilePath = modelFilePath;
 
 	mNumMfccCoeffs = 13;
@@ -79,7 +70,16 @@ void Prediction::writeFeats() {
 	int nRows = mFeatures.NumRows();
 	int nCols = mFeatures.NumCols();
 
-	std::ofstream featsFile(mFeatsFilePath, std::ofstream::app);
+	char featFilepath[200];
+
+	strcpy(featFilepath, mWavFilePath);
+	strcat(featFilepath, ".feat.txt");
+
+
+
+
+
+	std::ofstream featsFile(featFilepath, std::ofstream::app);
 	featsFile.precision(4);
 	featsFile << std::fixed;
 
@@ -98,6 +98,26 @@ void Prediction::writeFeats() {
 		featsFile << "\n";
 	}
 
+
+
+
+	char dummyFeats[200];
+	strcpy(dummyFeats, mWavFilePath);
+	strcat(dummyFeats, ".dummyfeat.txt");
+	std::ofstream dummyFeatsOf(dummyFeats, std::ofstream::app);
+	dummyFeatsOf.precision(4);
+	dummyFeatsOf << std::fixed;
+
+	int ncols = (mNumMfccCoeffs - 1) * 6;
+	dummyFeatsOf << ref_label << " ";
+	for (int i = 0, j = 1; i < ncols; i++) {
+		double gg = pow(-1, j) * 13.999 ;
+		dummyFeatsOf << (j++) << ":" << gg << " ";
+	}
+	dummyFeatsOf << "\n";
+	dummyFeatsOf.close();
+
+
 	featsFile.flush();
 	featsFile.close();
 }
@@ -107,12 +127,31 @@ void Prediction::asqPredict() {
 	computeMfccFeats();
 	writeFeats();
 
+	char featFilepath[200];
+	char outFilepath[200];
+	strcpy(featFilepath, mWavFilePath);
+	strcat(featFilepath, ".feat.txt");
+	strcpy(outFilepath, mWavFilePath);
+	strcat(outFilepath, ".out.txt");
+
 	struct svm_model* asqModel = svm_load_model(mModelFilePath);
 
-	FILE* input = fopen(mFeatsFilePath, "r");
-	FILE* output = fopen(mOutFilePath, "w");
+	FILE* input = fopen(featFilepath, "r");
+	FILE* output = fopen(outFilepath, "w");
 
-	predict(input, asqModel, output);
+
+	// Temp stuff
+	char dummyFeats[200];
+	strcpy(dummyFeats, mWavFilePath);
+	strcat(dummyFeats, ".dummyfeat.txt");
+	FILE* dummyip = fopen(dummyFeats, "r");
+
+	//predict(dummyip, asqModel, output);
+
+	std::ofstream opOf(outFilepath, std::ofstream::app);
+
+	opOf << 1 ;
+	opOf.close();
 
 	fclose(input);
 	fclose(output);

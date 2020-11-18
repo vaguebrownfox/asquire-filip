@@ -110,7 +110,9 @@ Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_asqPredict(JNIEnv *env,
     const char *modelFilePath = env->GetStringUTFChars(model_file_path, nullptr);
     const char *wavFilePath = rengine->getWavFilePath();
 
-    Prediction asqPrediction(wavFilePath, modelFilePath);
+    auto* asqPrediction = new Prediction(wavFilePath, modelFilePath);
 
-    asqPrediction.asqPredict();
+    asqPrediction->asqPredict();
+
+	delete asqPrediction;
 }

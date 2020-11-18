@@ -21,14 +21,12 @@
 #include<algorithm>
 #include<fstream>
 
+#include <random>
 class Prediction {
 private:
 	const char* mWavFilePath;
-	const char* mFeatsFilePath;
-	const char* mOutFilePath;
 	const char* mModelFilePath;
 
-	int32 mNChannel{};
 	kaldi::BaseFloat mMinDuration;
 	kaldi::MfccOptions mMfccOptions;
 	int32 mNumMfccCoeffs;
@@ -36,7 +34,7 @@ private:
 	kaldi::Matrix<kaldi::BaseFloat> mFeatures;
 
 public:
-	Prediction(const char* filepath, const char* featsFilepath);
+	Prediction(const char* filepath, const char* modelFilePath);
 	~Prediction();
 
 	void asqPredict();

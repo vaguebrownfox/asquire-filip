@@ -7,16 +7,6 @@
 	tools:context=".SurveyActivity">
 
 
-	<TextView
-		android:id="@+id/textView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Survey questions comes here"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-
 	<Button
 		android:id="@+id/next_button"
 		android:layout_width="wrap_content"
@@ -24,8 +14,18 @@
 		android:text="Go to recording"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<WebView
+		android:id="@+id/survey_activity_webview"
+		android:layout_width="417dp"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@+id/next_button"
+		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/textView" />
+		app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

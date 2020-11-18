@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqEngine;
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqViewModel;
@@ -34,6 +35,9 @@ public class RecordActivity extends AppCompatActivity {
 	private static final int AUDIO_EFFECT_REQUEST = 666;
 
 	Button recordButton, nextButton, optionButton;
+
+	private static final String[] mModels = {"cough.model"};
+	private HashMap<String, String> mModelCacheFiles;
 
 	//Service - Audio
 	private AudioService mAudService;
@@ -48,69 +52,27 @@ public class RecordActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_record);
 
-
-		recordButton = findViewById(R.id.control_button_record);
-		nextButton = findViewById(R.id.control_button_next);
-		optionButton = findViewById(R.id.control_button_options);
-
+		// Buttons ID
+		{
+			recordButton = findViewById(R.id.control_button_record);
+			nextButton = findViewById(R.id.control_button_next);
+			optionButton = findViewById(R.id.control_button_options);
+		}
+		mModelCacheFiles = new HashMap<>();
+		// Initialize stuff
 		setObservers();
+		cacheModelFiles();
+
+		// Button functions
+		recordButton.setOnClickListener(view -> recordFunction());
+		nextButton.setOnClickListener(view -> nextFunction());
+		optionButton.setOnClickListener(view -> optionFunction());
 
 
-		recordButton.setOnClickListener(view -> {
-			if (mAudService != null) {
-				if (!isRecordPermissionGranted()) {
-					requestRecordPermission();
-					return;
-				}
-				mAudService.function();
-				mAsqViewModel.setIsRecording(mAudService.isRecording);
-			} else {
-				Log.d(TAG, "Service object is null");
-			}
-		});
-
-		nextButton.setOnClickListener(view -> {
-			if (mUploadService != null && mAudService != null) {
-				Log.d(TAG, "onCreate: Uploading started");
-				if (mAudService.recordDone) {
-					mUploadService.uploadData(mAudService.RecFilePath, mAudService.RecFilename);
-					mAudService.recordDone = false;
-				} else {
-					makeToast("Recording not finished!");
-				}
-			}
-		});
-
-		optionButton.setOnClickListener(view -> {
-			Log.d(TAG, "onClick: TODO options");
-			makeToast("Reset: record again");
-
-			String modelFileName = "model.txt";
-			AssetManager asqAssets = getAssets();
-			File modelFile = new File(getCacheDir(), modelFileName);
-
-			try {
-				InputStream inputStream = asqAssets.open(modelFileName);
-				int size = inputStream.available();
-				byte[] buffer = new byte[size];
-				int n = inputStream.read(buffer);
-				inputStream.close();
-				Log.d(TAG, "onCreate: asset ip stream - " + n);
-
-				FileOutputStream fos = new FileOutputStream(modelFile);
-				fos.write(buffer);
-				fos.close();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			AsqEngine.asqPredict(modelFile.getAbsolutePath());
-			Log.d(TAG, "onCreate: prediction done?");
-		});
 
 	}
 
+	// onCreate Methods
 	private void setObservers() {
 		// Aud Service stuff
 		mAsqViewModel = ViewModelProviders.of(this).get(AsqViewModel.class);
@@ -147,13 +109,105 @@ public class RecordActivity extends AppCompatActivity {
 
 	}
 
+	private void cacheModelFiles() {
+
+		AssetManager asquireAssets = getAssets();
+		for (String model : mModels) {
+			try {
+
+				InputStream inputStream = asquireAssets.open(model);
+				int size = inputStream.available();
+				byte[] buffer = new byte[size];
+				int n = inputStream.read(buffer);
+				inputStream.close();
+				Log.d(TAG, "onCreate: asset ip stream - " + n);
+
+				File modelCacheFile = new File(getCacheDir(), model);
+				FileOutputStream fos = new FileOutputStream(modelCacheFile);
+				fos.write(buffer);
+				fos.close();
+
+				mModelCacheFiles.put(model, modelCacheFile.getAbsolutePath());
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	private void recordFunction() {
+		if (mAudService != null) {
+			if (!isRecordPermissionGranted()) {
+				requestRecordPermission();
+				return;
+			}
+			mAudService.function();
+			mAsqViewModel.setIsRecording(mAudService.isRecording);
+		} else {
+			Log.d(TAG, "Service object is null");
+		}
+	}
+
+	private void nextFunction() {
+		if (mUploadService != null && mAudService != null) {
+			Log.d(TAG, "onCreate: Uploading started");
+			if (mAudService.recordDone) {
+				mUploadService.uploadData(mAudService.RecFilePath, mAudService.RecFilename);
+				mAudService.recordDone = false;
+			} else {
+				makeToast("Recording not finished!");
+			}
+		}
+	}
+
+	private void optionFunction() {
+		String optionFunction = "predict";
+		optionButton.setText(optionFunction);
+
+
+		AsqEngine.asqPredict(mModelCacheFiles.get(mModels[0]));
+
+		Log.d(TAG, "onCreate: prediction done?");
+	}
+
+
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		AsqEngine.setDefaultStreamValues(this);
+		startServices();
+	}
+
+	private void startServices() {
+		// Audio Service - Pass User ID here
+		Intent audServiceIntent = new Intent(this, AudioService.class);
+		startService(audServiceIntent);
+		bindService(audServiceIntent, mAsqViewModel.getAudioServiceConnection(), Context.BIND_AUTO_CREATE);
+
+		// Upload Service - Pass User ID here
+		Intent upServiceIntent = new Intent(this, UploadService.class);
+		startService(upServiceIntent);
+		bindService(upServiceIntent, mAsqViewModel.getUploadServiceConnection(), Context.BIND_AUTO_CREATE);
+	}
+
+	@Override
+	protected void onPause() {
+		unbindService(mAsqViewModel.getAudioServiceConnection());
+		unbindService(mAsqViewModel.getUploadServiceConnection());
+		super.onPause();
+	}
 
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+	}
+	@Override
+	protected void onStop() {
 		// Clear cache folder
 		File[] files = getCacheDir().listFiles();
 		if (files != null) {
@@ -162,40 +216,8 @@ public class RecordActivity extends AppCompatActivity {
 				if (res) Log.d(TAG, "onStart: deleted file " + f.getName());
 			}
 		}
-
+		super.onStop();
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		AsqEngine.setDefaultStreamValues(this);
-		startServices();
-	}
-
-	@Override
-	protected void onPause() {
-
-		unbindService(mAsqViewModel.getAudioServiceConnection());
-		super.onPause();
-	}
-
-	private void startServices() {
-		Intent audServiceIntent = new Intent(this, AudioService.class);
-		startService(audServiceIntent);
-		bindService();
-
-		Intent upServiceIntent = new Intent(this, UploadService.class);
-		startService(upServiceIntent);
-		bindService(upServiceIntent, mAsqViewModel.getUploadServiceConnection(), Context.BIND_AUTO_CREATE);
-	}
-
-	private void bindService() {
-		Intent serviceIntent = new Intent(this, AudioService.class);
-		bindService(serviceIntent, mAsqViewModel.getAudioServiceConnection(), Context.BIND_AUTO_CREATE);
-	}
-
-
 
 
 	// Permissions
@@ -227,8 +249,10 @@ public class RecordActivity extends AppCompatActivity {
 	}
 
 	// Misc
+
 	private void makeToast(String msg) {
 		Toast.makeText(RecordActivity.this, msg, Toast.LENGTH_SHORT).show();
 	}
+
 
 }
