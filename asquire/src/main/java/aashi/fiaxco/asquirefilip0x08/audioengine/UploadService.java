@@ -85,7 +85,6 @@ public class UploadService extends Service {
 			e.printStackTrace();
 		}
 
-
 	}
 
 	@Override
