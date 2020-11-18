@@ -1,4 +1,4 @@
-package aashi.fiaxco.asquirefilip0x08.webview;
+package aashi.fiaxco.asquirefilip0x08.stuff;
 
 import android.content.Intent;
 import android.net.Uri;

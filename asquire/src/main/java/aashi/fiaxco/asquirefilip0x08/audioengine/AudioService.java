@@ -26,6 +26,7 @@ public class AudioService extends Service {
 	public String RecFilePath;
 	public String RecFilename;
 
+	public String mUserId;
 
 	public AudioService() {
 	}
@@ -86,7 +87,7 @@ public class AudioService extends Service {
 
 		Random rand = new Random();
 		int id = rand.nextInt(2000);
-		RecFilename = "myWavFile_" + Build.DEVICE + "_"
+		RecFilename = mUserId + "_" + Build.DEVICE + "_"
 								   + Build.PRODUCT + "_"
 								   + Build.HARDWARE + "_"
 								   + Build.MANUFACTURER+ "_"

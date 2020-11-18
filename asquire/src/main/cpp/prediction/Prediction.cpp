@@ -100,7 +100,7 @@ void Prediction::writeFeats() {
 
 
 
-
+	// dummy feat vector
 	char dummyFeats[200];
 	strcpy(dummyFeats, mWavFilePath);
 	strcat(dummyFeats, ".dummyfeat.txt");
@@ -111,7 +111,7 @@ void Prediction::writeFeats() {
 	int ncols = (mNumMfccCoeffs - 1) * 6;
 	dummyFeatsOf << ref_label << " ";
 	for (int i = 0, j = 1; i < ncols; i++) {
-		double gg = pow(-1, j) * 13.999 ;
+		double gg = pow(-1, j) * 420.69 ;
 		dummyFeatsOf << (j++) << ":" << gg << " ";
 	}
 	dummyFeatsOf << "\n";
@@ -146,12 +146,12 @@ void Prediction::asqPredict() {
 	strcat(dummyFeats, ".dummyfeat.txt");
 	FILE* dummyip = fopen(dummyFeats, "r");
 
-	//predict(dummyip, asqModel, output);
+	predict(dummyip, asqModel, output);
 
-	std::ofstream opOf(outFilepath, std::ofstream::app);
-
-	opOf << 1 ;
-	opOf.close();
+//	std::ofstream opOf(outFilepath, std::ofstream::app);
+//
+//	opOf << 1 ;
+//	opOf.close();
 
 	fclose(input);
 	fclose(output);

@@ -27,6 +27,7 @@
 		android:layout_height="wrap_content"
 		android:backgroundTint="@android:color/white"
 		android:contentDescription="@string/info"
+		android:visibility="invisible"
 		android:src="@android:drawable/ic_dialog_info"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -55,10 +56,38 @@
 		android:id="@+id/control_button_options"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/options"
+		android:text="@string/predict"
 		app:layout_constraintBaseline_toBaselineOf="@+id/control_button_record"
 		app:layout_constraintEnd_toStartOf="@+id/control_button_record"
 		app:layout_constraintStart_toStartOf="parent" />
+
+	<TextView
+		android:id="@+id/timer_textview"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingVertical="8dp"
+		android:text="@string/timer_init"
+		android:textAlignment="center"
+		android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+		android:textColor="#FF3C3C"
+		app:layout_constraintBottom_toTopOf="@+id/control_button_record"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<TextView
+		android:id="@+id/prediction_textView"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+		android:textAlignment="center"
+		android:fontFamily="sans-serif-medium"
+		android:text=""
+		app:layout_constraintBottom_toTopOf="@+id/timer_textview"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/button_info" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

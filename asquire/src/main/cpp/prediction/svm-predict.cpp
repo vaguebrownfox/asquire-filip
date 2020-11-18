@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
+#include <cstring>
+#include <cerrno>
 #include "svm-predict.h"
 
-//static int (*info)(const char *fmt,...) = &printf;
+static int (*info)(const char *fmt,...) = &printf;
 
 struct svm_node *x;
 int max_nr_attr = 64;

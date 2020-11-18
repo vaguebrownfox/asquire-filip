@@ -14,30 +14,44 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqEngine;
 import aashi.fiaxco.asquirefilip0x08.audioengine.AsqViewModel;
 import aashi.fiaxco.asquirefilip0x08.audioengine.AudioService;
 import aashi.fiaxco.asquirefilip0x08.audioengine.UploadService;
+import aashi.fiaxco.asquirefilip0x08.stuff.Stimulus;
+import aashi.fiaxco.asquirefilip0x08.stuff.Timer;
 
-public class RecordActivity extends AppCompatActivity {
+public class RecordActivity extends AppCompatActivity implements Timer.MessageConstants {
 
 	private static final String TAG = RecordActivity.class.getName();
 	private static final int AUDIO_EFFECT_REQUEST = 666;
 
 	Button recordButton, nextButton, optionButton;
+	FloatingActionButton info;
+	TextView stimulusTv, predictionTv;
 
 	private static final String[] mModels = {"cough.model"};
-	private HashMap<String, String> mModelCacheFiles;
+	private final HashMap<String, String> mModelCacheFiles = new HashMap<>();
+	private String[] mStimulus;
+	private int mNStimuli = 0;
+	private String mUserID;
+
+
+	// Timer
+	private Timer.TimerHandler mTimerHandler;
 
 	//Service - Audio
 	private AudioService mAudService;
@@ -52,23 +66,35 @@ public class RecordActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_record);
 
-		// Buttons ID
+		Intent pIntent = getIntent();
+		mUserID = pIntent.getStringExtra(UserIDActivity.USER_ID);
+
+		// Buttons ID & Views
 		{
 			recordButton = findViewById(R.id.control_button_record);
 			nextButton = findViewById(R.id.control_button_next);
 			optionButton = findViewById(R.id.control_button_options);
+			info = findViewById(R.id.button_info);
+			stimulusTv = findViewById(R.id.task_frag_description_tv);
+			predictionTv = findViewById(R.id.prediction_textView);
 		}
-		mModelCacheFiles = new HashMap<>();
+
+		// Timer
+		Timer mTimer = new Timer();
+		mTimerHandler = new Timer.TimerHandler(this, mTimer);
+
+		// Stimulus
+		mStimulus = Stimulus.getStimulus();
+		Log.d(TAG, "onCreate: " + Arrays.toString(mStimulus));
+
 		// Initialize stuff
 		setObservers();
-		cacheModelFiles();
 
 		// Button functions
 		recordButton.setOnClickListener(view -> recordFunction());
 		nextButton.setOnClickListener(view -> nextFunction());
 		optionButton.setOnClickListener(view -> optionFunction());
-
-
+		info.setOnClickListener(view -> clearCache());
 
 	}
 
@@ -93,6 +119,7 @@ public class RecordActivity extends AppCompatActivity {
 			optionButton.setEnabled(!isRec);
 			recordButton.setEnabled(false);
 			recordButton.postDelayed(() -> recordButton.setEnabled(true), 1000);
+			mTimerHandler.sendEmptyMessage(isRec ? MSG_START_TIMER : MSG_STOP_TIMER);
 
 		});
 
@@ -142,6 +169,7 @@ public class RecordActivity extends AppCompatActivity {
 				requestRecordPermission();
 				return;
 			}
+			mAudService.mUserId = mUserID;
 			mAudService.function();
 			mAsqViewModel.setIsRecording(mAudService.isRecording);
 		} else {
@@ -155,23 +183,48 @@ public class RecordActivity extends AppCompatActivity {
 			if (mAudService.recordDone) {
 				mUploadService.uploadData(mAudService.RecFilePath, mAudService.RecFilename);
 				mAudService.recordDone = false;
+				mPredicted = false;
+				predictionTv.setText("");
+				mTimerHandler.sendEmptyMessage(MSG_RESET_TIMER);
+				stimulusTv.setText(mStimulus[mNStimuli]);
+				mNStimuli = ++mNStimuli % mStimulus.length;
+
 			} else {
 				makeToast("Recording not finished!");
 			}
 		}
 	}
 
+	private boolean mPredicted = false;
 	private void optionFunction() {
-		String optionFunction = "predict";
-		optionButton.setText(optionFunction);
+		if (mAudService.recordDone && !mPredicted) {
+			int op = AsqEngine.asqPredict(mModelCacheFiles.get(mModels[0]));
+//			mAudService.recordDone = false;
+			String res = op > 0 ? "Asthma vibes" : "No Asthma vibes";
+			optionButton.setEnabled(false);
+			optionButton.postDelayed(() -> {
+				predictionTv.setText(res);
+				optionButton.setEnabled(true);
+				mPredicted = true;
+			}, 2000);
 
-
-		AsqEngine.asqPredict(mModelCacheFiles.get(mModels[0]));
+		} else {
+			makeToast("You have to record first");
+		}
 
 		Log.d(TAG, "onCreate: prediction done?");
 	}
 
-
+	private void clearCache() {
+		File[] files = getCacheDir().listFiles();
+		if (files != null) {
+			for (File f : files) {
+				boolean res = f.delete();
+				if (res) Log.d(TAG, "onStart: deleted file " + f.getName());
+			}
+		}
+		cacheModelFiles();
+	}
 
 
 	@Override
@@ -205,6 +258,8 @@ public class RecordActivity extends AppCompatActivity {
 	protected void onStart() {
 		super.onStart();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+		cacheModelFiles();
 	}
 	@Override
 	protected void onStop() {
@@ -256,3 +311,4 @@ public class RecordActivity extends AppCompatActivity {
 
 
 }
+

@@ -103,7 +103,7 @@ Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_native_1setDefaultStrea
 
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jint JNICALL
 Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_asqPredict(JNIEnv *env, jclass clazz,
                                                                     jstring model_file_path) {
 
@@ -115,4 +115,8 @@ Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_asqPredict(JNIEnv *env,
     asqPrediction->asqPredict();
 
 	delete asqPrediction;
+
+	int op = rand() % 100 > 49? 0 : 1;
+
+	return op;
 }

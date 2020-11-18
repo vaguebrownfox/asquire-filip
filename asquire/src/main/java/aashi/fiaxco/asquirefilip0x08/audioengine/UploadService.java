@@ -28,8 +28,6 @@ public class UploadService extends Service {
 
 	StorageReference data0x00Ref;
 
-
-
 	public UploadService() {
 	}
 
