@@ -231,6 +231,8 @@ public class RecordActivity extends AppCompatActivity implements Timer.MessageCo
 		super.onResume();
 		AsqEngine.setDefaultStreamValues(this);
 		startServices();
+		if (mAudService != null)
+			recordButton.setText(mAudService.isRecording ? R.string.stop : R.string.record);
 	}
 
 	private void startServices() {
