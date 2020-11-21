@@ -66,6 +66,33 @@ void Prediction::computeMfccFeats() {
 	}
 }
 
+
+
+void Prediction::calculateMfccStats() {
+
+	int nRows = mFeatures.NumRows();
+	int nCols = mFeatures.NumCols();
+
+	float32 stats[nCols];
+
+	for (int i = 0; i < nCols; i++) {
+
+		// mean
+		stats[i] = 0;
+		for (int j = 0; j < nRows; j++) {
+//			stats[i] += mFeatures
+		}
+	}
+
+}
+
+kaldi::Matrix<kaldi::BaseFloat> mean(kaldi::Matrix<kaldi::BaseFloat> features) {
+	int nRows = features.NumRows();
+	int nCols = features.NumCols();
+
+//	for (int i = 0; i <)
+}
+
 void Prediction::writeFeats() {
 	int nRows = mFeatures.NumRows();
 	int nCols = mFeatures.NumCols();
@@ -88,7 +115,7 @@ void Prediction::writeFeats() {
 	for (int i = 0; i < nRows; i++) {
 		SubVector<BaseFloat> row = mFeatures.Row(i);
 		featsFile << /**(labels + i)*/  ref_label << " ";
-		int index = 1;
+		int index = 0;
 		for (int j = 0; j < mNumMfccCoeffs; j++) {
 			if (j % mNumMfccCoeffs != 0) {
 				double gg = row.Data()[j];
@@ -109,20 +136,21 @@ void Prediction::writeFeats() {
 	dummyFeatsOf << std::fixed;
 
 	int ncols = (mNumMfccCoeffs - 1) * 6;
-	dummyFeatsOf << ref_label << " ";
-	for (int i = 0, j = 1; i < ncols; i++) {
-		double gg = pow(-1, j) * 420.69 ;
-		dummyFeatsOf << (j++) << ":" << gg << " ";
+	for (int k = 0; k <= 13; k++) {
+		dummyFeatsOf << ref_label << " ";
+		for (int i = 0, j = 0; i <= ncols; i++) {
+			double gg = pow(-1, j) * 0.1;
+			dummyFeatsOf << (j++) << ":" << gg << " ";
+		}
+		dummyFeatsOf << "\n";
 	}
-	dummyFeatsOf << "\n";
 	dummyFeatsOf.close();
-
 
 	featsFile.flush();
 	featsFile.close();
 }
 
-void Prediction::asqPredict() {
+void Prediction::asqPredict(const char* featfilepath) {
 
 	computeMfccFeats();
 	writeFeats();
@@ -146,7 +174,12 @@ void Prediction::asqPredict() {
 	strcat(dummyFeats, ".dummyfeat.txt");
 	FILE* dummyip = fopen(dummyFeats, "r");
 
-	predict(dummyip, asqModel, output);
+
+//	for (int i = 0; i < 16; i++) {
+		FILE* testfeatip = fopen(featfilepath, "r");
+		predict(testfeatip, asqModel, output);
+		fclose(testfeatip);
+//	}
 
 //	std::ofstream opOf(outFilepath, std::ofstream::app);
 //

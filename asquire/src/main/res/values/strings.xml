@@ -21,4 +21,7 @@
 	<string name="stop">Stop</string>
 	<string name="timer_init">00:00:00</string>
 	<string name="predict">Predict</string>
+	<string name="analysing_msg">Analyzing your recording...</string>
+	<string name="pred_result_message">Result</string>
+	<string name="previous">Previous</string>
 </resources>

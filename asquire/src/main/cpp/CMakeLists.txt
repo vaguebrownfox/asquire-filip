@@ -46,7 +46,6 @@ add_library( # Sets the name of the library.
         asqengine/AsqRecEngine.cpp
         asqengine/AsqPlyEngine.cpp
         prediction/Prediction.cpp
-        prediction/svm-predict.cpp
         jni-bridge.cpp)
 
 target_include_directories(

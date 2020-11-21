@@ -37,10 +37,11 @@ public:
 	Prediction(const char* filepath, const char* modelFilePath);
 	~Prediction();
 
-	void asqPredict();
+	void asqPredict(const char* featfilepath);
 
 private:
 	void computeMfccFeats();
+	void calculateMfccStats();
 	void writeFeats();
 
 };

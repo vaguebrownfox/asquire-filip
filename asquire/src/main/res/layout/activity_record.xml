@@ -8,27 +8,31 @@
 
 	<TextView
 		android:id="@+id/task_frag_description_tv"
-		android:layout_width="match_parent"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="24dp"
+		android:layout_marginEnd="16dp"
 		android:alpha="1"
 		android:fontFamily="sans-serif"
 		android:padding="16dp"
 		android:text="Take a deep breath in and say 'Eee' as in 'peace'  while breathing out"
 		android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-		android:textSize="48sp"
+		android:textSize="36sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
 
-	<com.google.android.material.floatingactionbutton.FloatingActionButton
+	<ImageButton
 		android:id="@+id/button_info"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:backgroundTint="@android:color/white"
 		android:contentDescription="@string/info"
-		android:visibility="invisible"
-		android:src="@android:drawable/ic_dialog_info"
+		android:src="@drawable/ic_baseline_error_outline_24"
+		android:backgroundTintMode="src_in"
+
+		android:visibility="visible"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/task_frag_description_tv" />
@@ -39,33 +43,36 @@
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="32dp"
 		android:text="@string/record"
+		android:textColor="@color/white"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
+		app:layout_constraintEnd_toStartOf="@+id/control_button_next"
+		app:layout_constraintStart_toEndOf="@+id/control_button_options" />
 
 	<Button
 		android:id="@+id/control_button_next"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginEnd="32dp"
 		android:text="@string/next"
+		android:textColor="@color/white"
 		app:layout_constraintBaseline_toBaselineOf="@+id/control_button_record"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@+id/control_button_record" />
+		app:layout_constraintEnd_toEndOf="parent" />
 
 	<Button
 		android:id="@+id/control_button_options"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/predict"
+		android:layout_marginStart="32dp"
+		android:text="@string/previous"
+		android:textColor="@color/white"
 		app:layout_constraintBaseline_toBaselineOf="@+id/control_button_record"
-		app:layout_constraintEnd_toStartOf="@+id/control_button_record"
 		app:layout_constraintStart_toStartOf="parent" />
 
 	<TextView
 		android:id="@+id/timer_textview"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:paddingVertical="8dp"
+		android:paddingVertical="16dp"
 		android:text="@string/timer_init"
 		android:textAlignment="center"
 		android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -80,14 +87,62 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="16dp"
 		android:layout_marginEnd="16dp"
-		android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-		android:textAlignment="center"
+		android:layout_marginBottom="16dp"
 		android:fontFamily="sans-serif-medium"
 		android:text=""
+		android:textAlignment="center"
+		android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+		app:layout_constraintBottom_toTopOf="@+id/asthma_progressBar"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<androidx.appcompat.widget.SwitchCompat
+		android:id="@+id/contribute"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="8dp"
+		android:text="Contribute only   "
 		app:layout_constraintBottom_toTopOf="@+id/timer_textview"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<ProgressBar
+		android:id="@+id/asthma_progressBar"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:layout_width="0dp"
+		android:layout_height="17dp"
+		android:layout_marginStart="12dp"
+		android:layout_marginEnd="12dp"
+		android:layout_marginBottom="16dp"
+		android:indeterminate="false"
+		android:indeterminateTint="#FF3C3C"
+		android:indeterminateTintMode="src_atop"
+		android:progress="0"
+		app:layout_constraintBottom_toTopOf="@+id/contribute"
+		app:layout_constraintEnd_toStartOf="@+id/high_pred_tv"
+		app:layout_constraintStart_toEndOf="@+id/low_pred_tv" />
+
+	<TextView
+		android:id="@+id/low_pred_tv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		android:text="Asthmn't"
+		android:textStyle="bold"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/button_info" />
+		app:layout_constraintTop_toBottomOf="@+id/prediction_textView" />
+
+	<TextView
+		android:id="@+id/high_pred_tv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="16dp"
+		android:text="Asthma"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/prediction_textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

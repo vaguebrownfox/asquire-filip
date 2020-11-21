@@ -36,5 +36,5 @@ public enum AsqEngine {
 		native_setDefaultStreamValues(defaultSampleRate, defaultFramesPerBurst);
 	}
 
-	public static native int asqPredict(String modelFilePath);
+	public static native float asqPredict(String modelFilePath, String featfile); // TODO: tmp param feat file
 }

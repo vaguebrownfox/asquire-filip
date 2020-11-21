@@ -106,7 +106,7 @@ public class AudioService extends Service {
 	private void stopRecord() {
 		Log.d(TAG, "Attempting to stop recording");
 
-		AsqEngine.setRecOn(false);
+		boolean res = AsqEngine.setRecOn(false);
 		mState = STATE.START;
 	}
 

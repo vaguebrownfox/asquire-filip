@@ -103,20 +103,21 @@ Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_native_1setDefaultStrea
 
 
 extern "C"
-JNIEXPORT jint JNICALL
+JNIEXPORT jfloat JNICALL
 Java_aashi_fiaxco_asquirefilip0x08_audioengine_AsqEngine_asqPredict(JNIEnv *env, jclass clazz,
-                                                                    jstring model_file_path) {
+                                                                    jstring model_file_path, jstring featfile) {
 
     const char *modelFilePath = env->GetStringUTFChars(model_file_path, nullptr);
     const char *wavFilePath = rengine->getWavFilePath();
 
     auto* asqPrediction = new Prediction(wavFilePath, modelFilePath);
 
-    asqPrediction->asqPredict();
+    asqPrediction->asqPredict(env->GetStringUTFChars(featfile, nullptr)); // TODO: tmp param feat file
 
 	delete asqPrediction;
 
-	int op = rand() % 100 > 49? 0 : 1;
+//	int op = rand() % 100 > 49? 0 : 1;
+    float op = (rand() % 100);
 
 	return op;
 }

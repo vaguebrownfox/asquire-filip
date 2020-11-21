@@ -33,9 +33,15 @@
 
 		<activity
 			android:name=".RecordActivity"
-			android:theme="@style/Theme.AppCompat.NoActionBar" />
-		<activity android:name=".SurveyActivity" />
-		<activity android:name=".UserIDActivity" android:icon="@drawable/asquire_logo">
+			android:screenOrientation="portrait"
+			android:theme="@style/Theme.AsquireFilip0x08" />
+		<activity
+			android:name=".SurveyActivity"
+			android:theme="@style/Theme.AsquireFilip0x08"/>
+		<activity
+			android:name=".UserIDActivity"
+			android:icon="@drawable/asquire_logo"
+			android:theme="@style/Theme.AsquireFilip0x08">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 

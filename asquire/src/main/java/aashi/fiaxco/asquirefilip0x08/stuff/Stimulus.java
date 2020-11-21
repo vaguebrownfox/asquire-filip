@@ -4,9 +4,9 @@ public class Stimulus {
 
 	private static final String[] mStimulus = new String[] {
 
-			"Please take a deep breath three times",
-			"Please take force breath 2 times",
-			"Please cough 3 times",
+			"Please take a deep breath 1 time",
+			"Please take force breath 1 times",
+			"Please cough 1 times",
 			"Take a deep breath in and say 'Aaa' as in 'Basket'  while breathing out",
 			"Take a deep breath in and say 'Ooo' as in 'Horrible'  while breathing out",
 			"Take a deep breath in and say 'Eee' as in 'peace'  while breathing out",
@@ -22,6 +22,7 @@ public class Stimulus {
 	}
 
 }
+
 /*
 		1. Please take a deep breath three times
 
@@ -41,7 +42,5 @@ public class Stimulus {
 
 		9. Take a deep breath in and say 'Zzz' as in 'Fuzz' while breathing out.
 
-		10. Take a deep breath in and say 'Yee' as in 'Yeeah'  while breathing out.
-
-
+		10. Take a deep breath in and say 'Yee' as in 'Yeah'  while breathing out.
 */
